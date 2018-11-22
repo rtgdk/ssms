@@ -24,6 +24,7 @@ import math
 import traceback
 ####
 #from django_cron import CronJobBase, Schedule
+from django.core.exceptions import ObjectDoesNotExist
 
 
 def datechecker(gmid):
@@ -959,56 +960,60 @@ def coord_upload(request, gmid):
                                         a = row[0]
                                         # Change to 13 if "P" is too be included
                                         a = str(a).upper()[:12]
-                                        try:
-                                            b = Student.objects.get(bits_id=str(a))
-                                            smailid = b.user_id
-                                            sname = b.name
-                                            sbhawan = b.bhawan
-                                            sroom = b.room_no
-                                            try:
-                                                gs = Grub_Student.objects.get(
-                                                    student_id=str(a), gm_id=gmid)
-                                                return None
-                                            except:
-                                                pass
-                                            row.append(smailid)
-                                            row.append(sname)
-                                            row.append(sbhawan)
-                                            row.append(sroom)
+					try:
+						id_check= Grub_Student.objects.filter(student_id = a)
+					except ObjectDoesNotExist:
+						try:
+						    b = Student.objects.get(bits_id=str(a))
+						    smailid = b.user_id
+						    sname = b.name
+						    sbhawan = b.bhawan
+						    sroom = b.room_no
+						    try:
+							gs = Grub_Student.objects.get(
+							    student_id=str(a), gm_id=gmid)
+							return None
+						    except:
+							pass
+						    row.append(smailid)
+						    row.append(sname)
+						    row.append(sbhawan)
+						    row.append(sroom)
 
-                                        except:
-                                            #global invalidids
-                                            #invalidids = True
-                                            invalid_grub = Grub_Invalid_Students.objects.get_or_create(
-                                                student_id=str(row[0]), gm_id=grub, meal=str(row[1]).lower()
-                                            )
+						except:
+						    #global invalidids
+						    #invalidids = True
+						    invalid_grub = Grub_Invalid_Students.objects.get_or_create(
+							student_id=str(row[0]), gm_id=grub, meal=str(row[1]).lower()
+						    )
 
-                                            return None
-                                            # if a[4]=="H" or a[4]=="P":
-                                            # 	smailid=a[4].lower()+a[0:4]+a[8:12]
-                                            # 	sname="User"
-                                            # 	sbhawan="Not Specified"
-                                            # 	sroom="Not Specified"
-                                            # 	row.append(smailid)
-                                            # 	row.append(sname)
-                                            # 	row.append(sbhawan)
-                                            # 	row.append(sroom)
-                                            # else :
-                                            # 	smailid="f"+a[0:4]+a[8:11]
-                                            # 	sname="User"
-                                            # 	sbhawan="Not Specified"
-                                            # 	sroom="Not Specified"
-                                            # 	row.append(smailid)
-                                            # 	row.append(sname)
-                                            # 	row.append(sbhawan)
-                                            # 	row.append(sroom)
-                                        if str(row[1]).lower() == "veg":
-                                            row[1] = "Veg"
-                                        elif str(row[1]).lower() == "non veg":
-                                            row[1] = "Non Veg"
-                                        row.append("Signed Up")
-                                        row.append(d)
-                                        return row
+						    return None
+						    # if a[4]=="H" or a[4]=="P":
+						    # 	smailid=a[4].lower()+a[0:4]+a[8:12]
+						    # 	sname="User"
+						    # 	sbhawan="Not Specified"
+						    # 	sroom="Not Specified"
+						    # 	row.append(smailid)
+						    # 	row.append(sname)
+						    # 	row.append(sbhawan)
+						    # 	row.append(sroom)
+						    # else :
+						    # 	smailid="f"+a[0:4]+a[8:11]
+						    # 	sname="User"
+						    # 	sbhawan="Not Specified"
+						    # 	sroom="Not Specified"
+						    # 	row.append(smailid)
+						    # 	row.append(sname)
+						    # 	row.append(sbhawan)
+						    # 	row.append(sroom)
+						if str(row[1]).lower() == "veg":
+						    row[1] = "Veg"
+						elif str(row[1]).lower() == "non veg":
+						    row[1] = "Non Veg"
+						row.append("Signed Up")
+						row.append(d)
+						return row
+					return NULL
                                     files = request.FILES['excel']
                                     files.save_to_database(
                                         model=Grub_Student,
