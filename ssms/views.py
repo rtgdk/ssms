@@ -88,7 +88,7 @@ def send(request):
                     html_content = "<body><p>This is to inform you that you have been signed up for the <strong> "+str(i.name) +\
                         "</strong> that is to take place on <strong>" + e + "</strong> </p> <p>In case you wish to cancel your signing,\
 					please visit <a href=http://www.ssms-pilani.org/ssms/student/grub/"+str(i.gm_id)+"/ >SSMS Grub Portal</a>, \
-					before 12 midnight,<strong>" + h + "</strong>. Any requests made after the deadline will not be entertained. \
+					before 11:59 PM,<strong>" + h + "</strong>. Any requests made after the deadline will not be entertained. \
 					</p> <p><strong> If the above url doesn't work, please click \
 					<a href=https://ssmsbitspilani.herokuapp.com/ssms/student/grub/"+str(i.gm_id)+"/ >here</a>\
 					</strong></p> <p>Thank you.</p><p>Grub Committee, SSMS</p></body>"
